@@ -9,11 +9,16 @@ public class TetrisGame extends JFrame {
     private static final int BLOCK_SIZE = 25;
     private static final int SIDE_PANEL_WIDTH = 200;
 
+    private static final Font TITLE_FONT = new Font("Consolas", Font.BOLD, 24);
+    private static final Font STATS_FONT = new Font("Consolas", Font.BOLD, 20);
+    private static final Font CONTROLS_FONT = new Font("Consolas", Font.PLAIN, 16);
+    private static final Font MESSAGE_FONT = new Font("Consolas", Font.BOLD, 30);
+
     private final GameBoard board;
     private Shape currentShape;
     private Timer gameTimer;
     private final GameState gameState;
-    private final Color[][] blockColors; // Store colors of placed blocks
+    private final Color[][] blockColors;
     private boolean isPaused;
     private JButton restartButton;
     private JButton pauseButton;
@@ -81,17 +86,26 @@ public class TetrisGame extends JFrame {
                 drawStats(g);
             }
         };
-        statsPanel.setPreferredSize(new Dimension(SIDE_PANEL_WIDTH, 300));
+        statsPanel.setPreferredSize(new Dimension(SIDE_PANEL_WIDTH, 250));
         statsPanel.setBackground(new Color(240, 240, 240));
         sidePanel.add(statsPanel);
+
+        // Add some rigid space before the button panel
+        sidePanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
         // Add buttons panel
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
         buttonPanel.setBackground(new Color(240, 240, 240));
 
+        // Set consistent button dimensions
+        Dimension buttonSize = new Dimension(100, 30);
+
         // Create and configure pause button
         pauseButton = new JButton("Pause");
+        pauseButton.setPreferredSize(buttonSize);
+        pauseButton.setMinimumSize(buttonSize);
+        pauseButton.setMaximumSize(buttonSize);
         pauseButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         pauseButton.addActionListener(e -> togglePause());
         pauseButton.setFocusable(false);
@@ -100,10 +114,15 @@ public class TetrisGame extends JFrame {
 
         // Create and configure restart button
         restartButton = new JButton("Restart");
+        restartButton.setPreferredSize(buttonSize);
+        restartButton.setMinimumSize(buttonSize);
+        restartButton.setMaximumSize(buttonSize);
         restartButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         restartButton.addActionListener(e -> restartGame());
         restartButton.setFocusable(false);
         buttonPanel.add(restartButton);
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+
 
         sidePanel.add(buttonPanel);
         return sidePanel;
@@ -111,7 +130,7 @@ public class TetrisGame extends JFrame {
 
     private void drawStats(Graphics g) {
         g.setColor(Color.BLACK);
-        g.setFont(new Font("Arial", Font.BOLD, 20));
+        g.setFont(STATS_FONT);
 
         // Draw score
         g.drawString("Score: " + gameState.getScore(), 20, 30);
@@ -123,7 +142,7 @@ public class TetrisGame extends JFrame {
         g.drawString("Lines: " + gameState.getLines(), 20, 90);
 
         // Draw controls
-        g.setFont(new Font("Arial", Font.PLAIN, 16));
+        g.setFont(CONTROLS_FONT);
         String[] controls = {
                 "Controls:",
                 "←: Move Left",
@@ -292,7 +311,7 @@ public class TetrisGame extends JFrame {
             g.fillRect(0, 0, board.getWidth() * BLOCK_SIZE,
                     board.getHeight() * BLOCK_SIZE);
             g.setColor(Color.WHITE);
-            g.setFont(new Font("Arial", Font.BOLD, 30));
+            g.setFont(MESSAGE_FONT);
             String pausedText = "PAUSED";
             FontMetrics metrics = g.getFontMetrics();
             int x = (board.getWidth() * BLOCK_SIZE - metrics.stringWidth(pausedText)) / 2;
@@ -306,7 +325,7 @@ public class TetrisGame extends JFrame {
             g.fillRect(0, 0, board.getWidth() * BLOCK_SIZE,
                     board.getHeight() * BLOCK_SIZE);
             g.setColor(Color.RED);
-            g.setFont(new Font("Arial", Font.BOLD, 30));
+            g.setFont(MESSAGE_FONT);
             String gameOver = "Game Over!";
             FontMetrics metrics = g.getFontMetrics();
             int x = (board.getWidth() * BLOCK_SIZE - metrics.stringWidth(gameOver)) / 2;
