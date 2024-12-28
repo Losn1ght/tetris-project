@@ -31,3 +31,7 @@ This is a Tetris game implementation that includes both the classic Tetris shape
 
 - Java 8 or higher.
 - A graphics library (e.g., AWT or Swing) to render the game.
+
+#Submitted By
+- Jedd Christian Juab
+- Sarah Palabrica
